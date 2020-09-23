@@ -28,4 +28,6 @@ class Order extends Model
 
 	public $timestamps = false;
 
+	protected $casts = ['order_date' => 'date'];
+
 }

@@ -16,15 +16,15 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_id');
-            $table->string('order_date');
+            $table->date('order_date');
             $table->string('ship_date');
             $table->string('priority');
-            $table->string('units_sold');
-            $table->string('unit_price');
-            $table->string('unit_cost');
-            $table->string('total_revenue');
-            $table->string('total_cost');
-            $table->string('total_profit');
+            $table->integer('units_sold');
+            $table->double('unit_price');
+            $table->double('unit_cost');
+            $table->double('total_revenue');
+            $table->double('total_cost');
+            $table->double('total_profit');
             $table->string('item_type');
             $table->string('region');
             $table->string('country');
