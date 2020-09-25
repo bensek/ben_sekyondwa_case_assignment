@@ -80,12 +80,12 @@
 									<tbody>
 										@foreach($orders as $order)
 										<tr role="row">
-											<th>{{$order->order_date}}</th>
+											<th>{{$order->order_date->format('m/d/y')}}</th>
 											<th>{{$order->priority}}</th>
-											<th>{{$order->units_sold}}</th>
+											<th>{{number_format($order->units_sold)}}</th>
 											<th>{{$order->unit_price}}</th>
-											<th>{{$order->total_cost}}</th>
-											<th>{{$order->total_revenue}}</th>
+											<th>{{number_format($order->total_cost, 2, '.', ',')}}</th>
+											<th>{{number_format($order->total_revenue, 2, '.', ',')}}</th>
 											<th>{{$order->item_type}}</th>
 										</tr>
 										@endforeach
@@ -124,7 +124,7 @@
 													Select CSV file:
 												</label>
 											<div class="custom-file">
-												<input type="file" class="custom-file-input" id="customFile" name="file">
+												<input type="file" class="custom-file-input" id="customFile" name="file" required="">
 												<label class="custom-file-label" for="customFile">
 													Choose file
 												</label>

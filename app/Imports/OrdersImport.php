@@ -5,8 +5,9 @@ namespace App\Imports;
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class OrdersImport implements ToModel
+class OrdersImport implements ToModel, WithStartRow
 {
     /**
     * @param array $row
@@ -14,16 +15,7 @@ class OrdersImport implements ToModel
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
-    {
-        // Excel::filter('chunk')->load(database_path('seeds/csv/users.csv'))->chunk(250, function($results) {
-        //     foreach ($results as $row) {
-        //         $user = User::create([
-        //             'username' => $row->username,
-        //             // other fields
-        //         ]);
-        //     }
-        // });
-        
+    {        
         return new Order([
             'region' => $row[0],
             'country' => $row[1],
@@ -40,5 +32,13 @@ class OrdersImport implements ToModel
             'total_cost' => $row[12],
             'total_profit' => $row[13],
         ]);
+    }
+
+    /**
+    * @return int
+    */
+    public function startRow(): int
+    {
+        return 2;
     }
 }

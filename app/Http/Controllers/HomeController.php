@@ -14,24 +14,7 @@ class HomeController extends Controller
     public function dashboard()
     {
     	Session(['title'=>'Dashboard']);
-
-        // Get orders between dates
-        $from = Carbon::parse('02/01/2016');
-        $to = Carbon::parse('02/01/2016');
-        $orders = Order::whereBetween('order_date', [$from, $to])->get();
-        //return response()->json($orders);
-        $total_profit = 0.0;
-        foreach($orders as $order){
-            $total_profit = $total_profit + $order->total_profit;
-        }
-        
-        $top_items = Order::whereBetween('order_date', [$from, $to])
-                    ->groupBy('item_type')
-                    ->selectRaw('*, sum(total_profit) as sum')
-                    ->orderBy('sum', 'desc')
-                    ->take(5)
-                    ->get();
-        return view('dashboard')->with(['orders'=>$orders, 'total_profit' => $total_profit, 'top_items'=> $top_items]);
+        return view('dashboard');
 }
 
     public function get_stats(Request $request)
@@ -40,25 +23,38 @@ class HomeController extends Controller
         $from = Carbon::parse($request->start_date);
         $to = Carbon::parse($request->end_date);
         $orders = Order::whereBetween('order_date', [$from, $to])->get();
-        //return response()->json($orders);
         $total_profit = 0.0;
         foreach($orders as $order){
             $total_profit = $total_profit + $order->total_profit;
         }
+        $total_sales = count($orders);
+
+
         $top_items = Order::whereBetween('order_date', [$from, $to])
                     ->groupBy('item_type')
                     ->selectRaw('*, sum(total_profit) as sum')
                     ->orderBy('sum', 'desc')
                     ->take(5)
-                    ->get();
+                    ->get()->toArray();
 
-        return view('dashboard')->with(['orders'=>$orders, 'total_profit' => $total_profit, 'top_items'=> $top_items]);
+        for($i = 0; $i < count($top_items); $i++){
+            $top_items[$i]['counter'] = $i+1;
+            $top_items[$i]['sum'] = number_format($top_items[$i]['sum'], 2, '.', ',');
+        }
+
+        $data = [
+                'total_profit' => number_format($total_profit, 2, '.', ','),
+                'total_sales' => number_format($total_sales ),
+                'top_items' => $top_items
+        ];
+
+        return response()->json($data);
     }
 
     public function get_reports()
     {
     	Session(['title'=>'Reports']);
-    	$orders = Order::get()->take(100);
+    	$orders = Order::get();
     	return view('reports')->with(['orders'=>$orders]);
     }
 

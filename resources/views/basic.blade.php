@@ -5,10 +5,11 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>
-			{{session('title')}} | Ben Sekyondwa
+			{{session('title')}} | {{config('app.name')}}
 		</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<!--begin::Web font -->
 		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
 		<script>
@@ -19,10 +20,6 @@
             }
           });
 		</script>
-		<!--end::Web font -->
-        <!--begin::Base Styles -->  
-        <!--begin::Page Vendors -->
-		<!--end::Page Vendors -->
 		<link href="/css/vendors.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="/css/style.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="/css/datatables.bundle.css" rel="stylesheet" type="text/css" />
@@ -40,7 +37,7 @@
 	
 		<div class="m-grid m-grid--hor m-grid--root m-page">
 			<!-- begin::Header -->
-			<header id="m_header" class="m-grid__item		m-header "  m-minimize="minimize" m-minimize-offset="200" m-minimize-mobile-offset="200" >
+			<header id="m_header" class="m-grid__item m-header "  m-minimize="minimize" m-minimize-offset="200" m-minimize-mobile-offset="200" >
 				<div class="m-header__top">
 					<div class="m-container m-container--responsive m-container--xxl m-container--full-height m-page__container">
 						<div class="m-stack m-stack--ver m-stack--desktop">
@@ -48,8 +45,8 @@
 							<div class="m-stack__item m-brand">
 								<div class="m-stack m-stack--ver m-stack--general m-stack--inline">
 									<div class="m-stack__item m-stack__item--middle m-brand__logo">
-										<a href="index.html" class="m-brand__logo-wrapper">
-											<img alt="" src="/logo.png"/>
+										<a href="{{route('dashboard')}}" class="m-brand__logo-wrapper" style="text-decoration: none;">
+											<h3>{{config('app.name')}}</h3>
 										</a>
 									</div>
 								</div>
@@ -68,7 +65,7 @@
 								</button>
 								<div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light "  >
 									<ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
-										<li class="m-menu__item {{(strpos(Route::currentRouteName(), 'dashboard') == 0) ? 'active' : ''}} "  aria-haspopup="true">
+										<li class="m-menu__item {{ Request::is('dashboard') ? 'm-menu__item--active' : '' }} ">
 											<a  href="/" class="m-menu__link ">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
@@ -76,7 +73,7 @@
 												</span>
 											</a>
 										</li>
-										<li class="m-menu__item {{(strpos(Route::currentRouteName(), 'reports') == 0) ? 'active' : ''}} "  aria-haspopup="true">
+										<li class="m-menu__item {{ Request::is('reports') ? 'm-menu__item--active' : '' }} "  aria-haspopup="true">
 											<a  href="/reports" class="m-menu__link ">
 												<span class="m-menu__item-here"></span>
 												<span class="m-menu__link-text">
@@ -104,7 +101,7 @@
 						<div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
 							<div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
 								<span class="m-footer__copyright">
-									2020 &copy; Reporting tool by
+									2020 &copy; {{config('app.name')}} by
 									<a href="#" class="m-link">
 										Ben Sekyondwa
 									</a>
@@ -137,7 +134,15 @@
 		<script src="/js/basic.js" type="text/javascript"></script>
 		<script src="/js/bootstrap-datepicker.js" type="text/javascript"></script>
 		<script src="/js/bootstrap-daterangepicker.js" type="text/javascript"></script>
+		<script src="/js/form-widgets.js" type="text/javascript"></script>
 
+		<script type="text/javascript">
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+		</script>
 
 		
 	</body>

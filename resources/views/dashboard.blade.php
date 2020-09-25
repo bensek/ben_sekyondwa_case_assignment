@@ -16,7 +16,7 @@
 							<div>
 							
 									
-								 <form method='post' action='{{route('get_stats')}}'>
+								 <form method='post' action='{{route('get_stats')}}' novalidate="novalidate" class="m-form ">
 								 	@csrf
 								 	<div class=" row">
 								 		
@@ -26,7 +26,7 @@
 															Start Date:
 														</span>
 													</div>
-													<input type="text" class="form-control m-input" id="start_date" readonly="" placeholder="Select date" name="start_date" required="">
+													<input type="text" class="form-control m-input" id="start_date" readonly="" placeholder="Select date" name="start_date" required="" value="01/01/2010">
 											</div>
 								 			<div class="input-group m-input-group col-lg-5">
 													<div class="input-group-prepend">
@@ -34,12 +34,19 @@
 															End Date:
 														</span>
 													</div>
-													<input type="text" class="form-control m-input" id="end_date" readonly="" placeholder="Select date" name="end_date" required="">
+													<input type="text" class="form-control m-input" id="end_date" readonly="" placeholder="Select date" name="end_date" required="" value="12/30/2019">
 											</div>
 								 		
 								 		
 								 		<div class="col-lg-2 text-right">
-	    									<input type='submit' value='Filter' class="btn btn-primary btn-lg">
+								 			<a href="#" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air" onclick="get_stats()">
+															<span>
+																<i class="fa fa-filter"></i>
+																<span>
+																	Filter
+																</span>
+															</span>
+														</a>
 								 		</div>
 								 	</div>
 								 	
@@ -60,7 +67,7 @@
 												<span class="m-portlet__head-icon">
 													<i class="flaticon-statistics"></i>
 												</span>
-												<h3 class="m-portlet__head-text">
+												<h3 class="m-portlet__head-text" >
 													Total Profit
 												</h3>
 											</div>
@@ -68,7 +75,9 @@
 										
 									</div>
 									<div class="m-portlet__body">
-										<h1>{{number_format($total_profit)}}</h1>
+										<h1 id="total_profit">
+										0																	
+										</h1>
 									</div>
 								</div>
 								<div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi m--bg-success">
@@ -76,17 +85,19 @@
 										<div class="m-portlet__head-caption">
 											<div class="m-portlet__head-title">
 												<span class="m-portlet__head-icon">
-													<i class="flaticon-statistics"></i>
+													<i class="flaticon-cart"></i>
 												</span>
-												<h3 class="m-portlet__head-text">
+												<h3 class="m-portlet__head-text" >
 													Number of Sales
 												</h3>
 											</div>
 										</div>
 										
 									</div>
-									<div class="m-portlet__body">
-										<h1>{{ number_format($orders->count())}}</h1>
+									<div class="m-portlet__body" >
+										<h1 id="total_sales">
+											0
+										</h1>
 									</div>
 								</div>
 							</div>
@@ -112,7 +123,6 @@
 												<div class="m-widget11">
 													<div class="table-responsive">
 														<!--begin::Table-->
-														@if(count($top_items) > 0)
 														<table class="table">
 															<!--begin::Thead-->
 															<thead>
@@ -134,208 +144,21 @@
 							<!--begin::Tbody-->
 															<tbody>
 																
-																@php $counter = 1 @endphp
-																@foreach($top_items as $top)
-
-
-																<tr>
-																	<td>
-																		{{$counter++}}
-																	</td>
-																	<td>
-																		<span class="m-widget11__title">
-																			{{$top->item_type}}
-																		</span>
-																		
-																	</td>
-																	
-																	
-																	<td class="m--align-right m--font-brand">
-																		{{number_format($top->sum)}}
-																	</td>
-																</tr>
-																@endforeach
+																
 																
 																
 															</tbody>
 															<!--end::Tbody-->
 														</table>
 														<!--end::Table-->
-														@else
-														<div class="text-center">
-															<span class="text-center text-primary"> No item types found</span>
-														</div>
-
-																
-														@endif
+														
 													</div>
 													
 												</div>
 												<!--end::Widget 11-->
 											</div>
 											<!--end::tab 1 content-->
-			<!--begin::tab 2 content-->
-											<div class="tab-pane" id="m_widget11_tab2_content">
-												<!--begin::Widget 11-->
-												<div class="m-widget11">
-													<div class="table-responsive">
-														<!--begin::Table-->
-														<table class="table">
-															<!--begin::Thead-->
-															<thead>
-																<tr>
-																	<td class="m-widget11__label">
-																		#
-																	</td>
-																	<td class="m-widget11__app">
-																		Application
-																	</td>
-																	<td class="m-widget11__sales">
-																		Sales
-																	</td>
-																	<td class="m-widget11__change">
-																		Change
-																	</td>
-																	<td class="m-widget11__price">
-																		Avg Price
-																	</td>
-																	<td class="m-widget11__total m--align-right">
-																		Total
-																	</td>
-																</tr>
-															</thead>
-															<!--end::Thead-->
-							<!--begin::Tbody-->
-															<tbody>
-																<tr>
-																	<td>
-																		<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
-																			<input type="checkbox">
-																			<span></span>
-																		</label>
-																	</td>
-																	<td>
-																		<span class="m-widget11__title">
-																			Loop
-																		</span>
-																		<span class="m-widget11__sub">
-																			CRM System
-																		</span>
-																	</td>
-																	<td>
-																		19,200
-																	</td>
-																	<td>
-																		$63
-																	</td>
-																	<td>
-																		$11,300
-																	</td>
-																	<td class="m--align-right m--font-brand">
-																		$34,740
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
-																			<input type="checkbox">
-																			<span></span>
-																		</label>
-																	</td>
-																	<td>
-																		<span class="m-widget11__title">
-																			Selto
-																		</span>
-																		<span class="m-widget11__sub">
-																			Powerful Website Builder
-																		</span>
-																	</td>
-																	<td>
-																		24,310
-																	</td>
-																	<td>
-																		$39
-																	</td>
-																	<td>
-																		$14,700
-																	</td>
-																	<td class="m--align-right m--font-brand">
-																		$46,010
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
-																			<input type="checkbox">
-																			<span></span>
-																		</label>
-																	</td>
-																	<td>
-																		<span class="m-widget11__title">
-																			Jippo
-																		</span>
-																		<span class="m-widget11__sub">
-																			The Best Selling App
-																		</span>
-																	</td>
-																	<td>
-																		9,076
-																	</td>
-																	<td>
-																		$105
-																	</td>
-																	<td>
-																		$8,400
-																	</td>
-																	<td class="m--align-right m--font-brand">
-																		$67,800
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
-																			<input type="checkbox">
-																			<span></span>
-																		</label>
-																	</td>
-																	<td>
-																		<span class="m-widget11__title">
-																			Verto
-																		</span>
-																		<span class="m-widget11__sub">
-																			Web Development Tool
-																		</span>
-																	</td>
-																	<td>
-																		11,094
-																	</td>
-																	<td>
-																		$16
-																	</td>
-																	<td>
-																		$12,500
-																	</td>
-																	<td class="m--align-right m--font-brand">
-																		$18,520
-																	</td>
-																</tr>
-															</tbody>
-															<!--end::Tbody-->
-														</table>
-														<!--end::Table-->
-													</div>
-													<div class="m-widget11__action m--align-right">
-														<button type="button" class="btn m-btn--pill btn-outline-brand m-btn m-btn--custom">
-															Generate Report
-														</button>
-													</div>
-												</div>
-												<!--end::Widget 11-->
-											</div>
-											<!--end::tab 2 content-->
-			<!--begin::tab 3 content-->
-											<div class="tab-pane" id="m_widget11_tab3_content"></div>
-											<!--end::tab 3 content-->
+		
 										</div>
 										<!--End::Tab Content-->
 									</div>
@@ -352,13 +175,41 @@
 
 			<script type='text/javascript'>
    $(document).ready(function(){
+
+   	 get_stats();
+
      $('#start_date').datepicker({
        
      });
      $('#end_date').datepicker({
        
      });
+
+
+     
    });
+
+   function get_stats(){
+
+   		 var start_date =  $("#start_date").val(); 
+   		 var end_date = $("#end_date").val();
+
+		 $.post('get_stats', 
+		 	{ start_date: start_date, end_date : end_date}, 
+		    function(data){
+	           console.log(data);
+
+	           $("#total_profit").text(data['total_profit']);
+	           $("#total_sales").text(data['total_sales']);
+
+			    var table = $(".table tbody");
+			    $(".table tr").remove();
+			    $.each(data['top_items'], function(idx, elem){
+			        table.append("<tr><td>"+ elem.counter +"</td><td class='m-widget11__title'>"+elem.item_type+"</td>   <td class='m--align-right m--font-brand'>"+elem.sum+"</td></tr>");
+			    });
+	       
+		});
+    }
 
    </script>
 
